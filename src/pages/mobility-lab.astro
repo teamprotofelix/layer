@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ImageWithFallback from '../components/ImageWithFallback.astro';
 import NextLinks from '../components/NextLinks.astro';
 ---
 
@@ -7,6 +8,9 @@ import NextLinks from '../components/NextLinks.astro';
   <div class="page">
     <div class="container">
       <div id="mobility-lab-root"></div>
+      <section class="section">
+        <ImageWithFallback name="persona-voyage" altKey="meta.mobilityLabTitle" ratio="16 / 9" />
+      </section>
       <NextLinks next={{ href: '/return-lab/', key: 'next.returnLab' }} />
     </div>
   </div>
