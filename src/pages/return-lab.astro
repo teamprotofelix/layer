@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NextLinks from '../components/NextLinks.astro';
+---
+
+<BaseLayout titleKey="meta.returnLabTitle" descKey="meta.returnLabDesc">
+  <div class="page">
+    <div class="container">
+      <div id="return-lab-root"></div>
+      <NextLinks next={{ href: '/experiment/', key: 'next.experiment' }} />
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { mountReturnLab } from '../labs/return-lab';
+
+  const root = document.getElementById('return-lab-root');
+  if (root) mountReturnLab(root);
+</script>

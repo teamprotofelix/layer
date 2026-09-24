@@ -1,0 +1,24 @@
+---
+/**
+ * Evidence-state badge. Text comes from the i18n dict (badge.STATE),
+ * the description becomes the tooltip (badge.STATE.desc).
+ * Color is never the only signal — the name is always visible.
+ */
+import { t } from '../i18n';
+import type { EvidenceState } from '../lib/types';
+
+interface Props {
+  state: EvidenceState;
+}
+
+const { state } = Astro.props;
+---
+
+<span
+  class={`badge badge-${state}`}
+  data-i18n={`badge.${state}`}
+  data-i18n-attr={`title|badge.${state}.desc`}
+  title={t('ko', `badge.${state}.desc`)}
+>
+  {t('ko', `badge.${state}`)}
+</span>

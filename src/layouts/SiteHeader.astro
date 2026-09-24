@@ -1,0 +1,129 @@
+---
+import { t } from '../i18n';
+import type { I18nKey } from '../i18n';
+
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+interface NavItem {
+  href: string;
+  key: I18nKey;
+}
+
+const items: NavItem[] = [
+  { href: '/', key: 'nav.home' },
+  { href: '/research/', key: 'nav.research' },
+  { href: '/architecture/', key: 'nav.architecture' },
+];
+const labs: NavItem[] = [
+  { href: '/layer-lab/', key: 'nav.layerLab' },
+  { href: '/persona-lab/', key: 'nav.personaLab' },
+  { href: '/mobility-lab/', key: 'nav.mobilityLab' },
+  { href: '/return-lab/', key: 'nav.returnLab' },
+];
+const compare: NavItem[] = [
+  { href: '/experiment/', key: 'nav.experiment' },
+  { href: '/method/', key: 'nav.method' },
+];
+const tail: NavItem[] = [
+  { href: '/future/', key: 'nav.future' },
+  { href: '/sources/', key: 'nav.sources' },
+];
+
+function isCurrent(href: string): boolean {
+  const target = href.replace(/\/$/, '') || '/';
+  return path === target;
+}
+---
+
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a class="brand" href={base} aria-label="Astra">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#16294c"></rect>
+        <rect x="14" y="26" width="36" height="12" rx="6" fill="#0e7c7b"></rect>
+        <circle cx="20" cy="32" r="3" fill="#e9efe6"></circle>
+        <circle cx="32" cy="32" r="3" fill="#7fd6d0"></circle>
+        <circle cx="44" cy="32" r="3" fill="#e9b44c"></circle>
+        <path d="M14 20 L32 8 L50 20" fill="none" stroke="#7fd6d0" stroke-width="2.5" stroke-linecap="round"></path>
+        <path d="M14 44 L32 56 L50 44" fill="none" stroke="#7fd6d0" stroke-width="2.5" stroke-linecap="round"></path>
+      </svg>
+      <span>
+        <span data-i18n="nav.siteName">{t('ko', 'nav.siteName')}</span>
+        <small>CAIPEX · A-HMMA</small>
+      </span>
+    </a>
+
+    <div class="pickers">
+      <label class="visually-hidden" for="lang-select" data-i18n="lang.label">
+        {t('ko', 'lang.label')}
+      </label>
+      <select id="lang-select" class="lang-select" aria-label="Language / 언어 / 言語">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
+      </select>
+
+      <div class="theme-group" role="group" aria-label="Theme / 테마 / テーマ">
+        <button type="button" data-theme-choice-btn="system" aria-pressed="false">
+          <span class="theme-dot light" aria-hidden="true"></span
+          ><span data-i18n="theme.system">{t('ko', 'theme.system')}</span>
+        </button>
+        <button type="button" data-theme-choice-btn="light" aria-pressed="false">
+          <span class="theme-dot light" aria-hidden="true"></span
+          ><span data-i18n="theme.light">{t('ko', 'theme.light')}</span>
+        </button>
+        <button type="button" data-theme-choice-btn="dark" aria-pressed="false">
+          <span class="theme-dot dark" aria-hidden="true"></span
+          ><span data-i18n="theme.dark">{t('ko', 'theme.dark')}</span>
+        </button>
+      </div>
+    </div>
+
+    <button
+      id="nav-toggle"
+      class="btn btn-small nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-i18n="nav.menuToggle"
+    >
+      {t('ko', 'nav.menuToggle')}
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      {
+        items.map((item) => (
+          <a href={`${base}${item.href.slice(1)}`} aria-current={isCurrent(item.href) ? 'page' : undefined} data-i18n={item.key}>
+            {t('ko', item.key)}
+          </a>
+        ))
+      }
+      <details class="nav-labs-menu" open={labs.some((l) => isCurrent(l.href))}>
+        <summary data-i18n="nav.labs">{t('ko', 'nav.labs')}</summary>
+        <div class="nav-labs-panel">
+          {labs.map((lab) => (
+            <a href={`${base}${lab.href.slice(1)}`} aria-current={isCurrent(lab.href) ? 'page' : undefined} data-i18n={lab.key}>
+              {t('ko', lab.key)}
+            </a>
+          ))}
+        </div>
+      </details>
+      <details class="nav-labs-menu" open={compare.some((c) => isCurrent(c.href))}>
+        <summary data-i18n="nav.experiment">{t('ko', 'nav.experiment')}</summary>
+        <div class="nav-labs-panel">
+          {compare.map((c) => (
+            <a href={`${base}${c.href.slice(1)}`} aria-current={isCurrent(c.href) ? 'page' : undefined} data-i18n={c.key}>
+              {t('ko', c.key)}
+            </a>
+          ))}
+        </div>
+      </details>
+      {tail.map((item) => (
+        <a href={`${base}${item.href.slice(1)}`} aria-current={isCurrent(item.href) ? 'page' : undefined} data-i18n={item.key}>
+          {t('ko', item.key)}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,92 @@
+---
+import { t } from '../i18n';
+
+const base = import.meta.env.BASE_URL;
+
+const researchLinks = [
+  { href: '/research/', key: 'nav.research' },
+  { href: '/architecture/', key: 'nav.architecture' },
+  { href: '/experiment/', key: 'nav.experiment' },
+  { href: '/method/', key: 'nav.method' },
+];
+const labLinks = [
+  { href: '/layer-lab/', key: 'nav.layerLab' },
+  { href: '/persona-lab/', key: 'nav.personaLab' },
+  { href: '/mobility-lab/', key: 'nav.mobilityLab' },
+  { href: '/return-lab/', key: 'nav.returnLab' },
+];
+const aboutLinks = [
+  { href: '/future/', key: 'nav.future' },
+  { href: '/sources/', key: 'nav.sources' },
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h2 data-i18n="footer.colResearch">{t('ko', 'footer.colResearch')}</h2>
+        <ul>
+          {researchLinks.map((l) => (
+            <li>
+              <a href={`${base}${l.href.slice(1)}`} data-i18n={l.key}>
+                {t('ko', l.key)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="footer.colLabs">{t('ko', 'footer.colLabs')}</h2>
+        <ul>
+          {labLinks.map((l) => (
+            <li>
+              <a href={`${base}${l.href.slice(1)}`} data-i18n={l.key}>
+                {t('ko', l.key)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="footer.colAbout">{t('ko', 'footer.colAbout')}</h2>
+        <ul>
+          {aboutLinks.map((l) => (
+            <li>
+              <a href={`${base}${l.href.slice(1)}`} data-i18n={l.key}>
+                {t('ko', l.key)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 data-i18n="common.caipexSupport">{t('ko', 'common.caipexSupport')}</h2>
+        <ul>
+          <li>
+            <a href="https://caipex.site/" rel="external noopener">CAIPEX — caipex.site</a>
+          </li>
+          <li>
+            <a href="https://protofelix.moip.ai.kr/astra/" rel="external noopener">AstraHo</a>
+            <span class="visually-hidden"> </span>
+            <span data-i18n-attr="title|common.astrahoDesc" title={t('ko', 'common.astrahoDesc')} aria-hidden="true"></span>
+          </li>
+          <li>
+            <a href="https://protofelix.moip.ai.kr/" rel="external noopener">Protofelix</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="fine-print" data-i18n="footer.lede">{t('ko', 'footer.lede')}</p>
+    <p class="fine-print">
+      <strong data-i18n="footer.disclaimerTitle">{t('ko', 'footer.disclaimerTitle')}:</strong>
+      <span data-i18n="footer.disclaimer"> {t('ko', 'footer.disclaimer')}</span>
+    </p>
+    <p class="fine-print">
+      <span data-i18n="footer.paperLabel">{t('ko', 'footer.paperLabel')}:</span>
+      {t('ko', 'common.paperAuthor')}, 「{t('ko', 'common.paperTitle')}」, {t('ko', 'common.paperVenue')},{' '}
+      {t('ko', 'common.paperDate')}.
+    </p>
+  </div>
+</footer>

@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
+import NextLinks from '../components/NextLinks.astro';
+import { t } from '../i18n';
+
+const base = import.meta.env.BASE_URL;
+
+const rqs = ['A', 'B', 'C', 'D', 'E'] as const;
+const hs = [1, 2, 3, 4, 5, 6] as const;
+const limits = [1, 2, 3, 4] as const;
+const terms = [
+  { key: 'research.terms.ark', cat: 'arch' },
+  { key: 'research.terms.capsule', cat: 'arch' },
+  { key: 'research.terms.layer', cat: 'arch' },
+  { key: 'research.terms.mobility', cat: 'method' },
+  { key: 'research.terms.experiment', cat: 'method' },
+  { key: 'research.terms.return', cat: 'arch' },
+] as const;
+---
+
+<BaseLayout titleKey="meta.researchTitle" descKey="meta.researchDesc">
+  <div class="page">
+    <div class="container">
+      <h1 data-i18n="research.title">{t('ko', 'research.title')}</h1>
+      <p class="lead" data-i18n="research.lead">{t('ko', 'research.lead')}</p>
+      <div class="card-title-row">
+        <EvidenceBadge state="CONCEPT" />
+        <EvidenceBadge state="EXPECTED" />
+      </div>
+
+      <section class="section" aria-labelledby="abstract-title">
+        <h2 id="abstract-title" data-i18n="research.abstractTitle">{t('ko', 'research.abstractTitle')}</h2>
+        <p data-i18n="research.abstract">{t('ko', 'research.abstract')}</p>
+      </section>
+
+      <section class="section" aria-labelledby="rq-title">
+        <h2 id="rq-title" data-i18n="research.rqTitle">{t('ko', 'research.rqTitle')}</h2>
+        <div class="card-grid">
+          {rqs.map((r) => (
+            <div class="card">
+              <h3 style="margin-top: 0;" data-i18n={`research.rq${r}.title`}>{t('ko', `research.rq${r}.title`)}</h3>
+              <p data-i18n={`research.rq${r}.text`}>{t('ko', `research.rq${r}.text`)}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="h-title">
+        <h2 id="h-title" data-i18n="research.hTitle">{t('ko', 'research.hTitle')}</h2>
+        <div class="card-grid">
+          {hs.map((h) => (
+            <div class="card">
+              <h3 style="margin-top: 0;">H{h}</h3>
+              <p data-i18n={`research.h${h}`}>{t('ko', `research.h${h}`)}</p>
+              <EvidenceBadge state="EXPECTED" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ahmma-title">
+        <h2 id="ahmma-title" data-i18n="research.ahmmaTitle">{t('ko', 'research.ahmmaTitle')}</h2>
+        <p data-i18n="research.ahmmaText">{t('ko', 'research.ahmmaText')}</p>
+        <p>
+          <a href={`${base}architecture/`} data-i18n="nav.architecture">{t('ko', 'nav.architecture')} →</a>
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="terms-title">
+        <h2 id="terms-title" data-i18n="research.termsTitle">{t('ko', 'research.termsTitle')}</h2>
+        <p data-i18n="research.termsHint">{t('ko', 'research.termsHint')}</p>
+        <div id="terms-root">
+          <ul style="list-style: none; padding: 0; display: flex; gap: .5rem; flex-wrap: wrap;">
+            {terms.map((term) => (
+              <li>
+                <span class="badge" data-i18n={term.key}>{t('ko', term.key)}</span>
+              </li>
+            ))}
+          </ul>
+          <p>
+            <a href={`${base}sources/`} data-i18n="nav.sources">{t('ko', 'nav.sources')} →</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="limits-title">
+        <h2 id="limits-title" data-i18n="research.limitsTitle">{t('ko', 'research.limitsTitle')}</h2>
+        <ul>
+          {limits.map((l) => (
+            <li data-i18n={`research.limits${l}`}>{t('ko', `research.limits${l}`)}</li>
+          ))}
+        </ul>
+      </section>
+
+      <NextLinks next={{ href: '/architecture/', key: 'next.architecture' }} />
+    </div>
+  </div>
+</BaseLayout>

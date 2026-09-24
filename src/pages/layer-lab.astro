@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NextLinks from '../components/NextLinks.astro';
+---
+
+<BaseLayout titleKey="meta.layerLabTitle" descKey="meta.layerLabDesc">
+  <div class="page">
+    <div class="container">
+      <div id="layer-lab-root"></div>
+      <NextLinks next={{ href: '/persona-lab/', key: 'next.personaLab' }} />
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { mountLayerLab } from '../labs/layer-lab';
+
+  const root = document.getElementById('layer-lab-root');
+  if (root) mountLayerLab(root);
+</script>

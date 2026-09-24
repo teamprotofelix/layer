@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
+import NextLinks from '../components/NextLinks.astro';
+import { t } from '../i18n';
+import { GLOSSARY } from '../data/glossary';
+import { SOURCES } from '../data/sources';
+
+const base = import.meta.env.BASE_URL;
+const states = ['NARRATIVE', 'CONCEPT', 'PROTOTYPE', 'SIMULATION', 'EXPECTED', 'MEASURED'] as const;
+---
+
+<BaseLayout titleKey="meta.sourcesTitle" descKey="meta.sourcesDesc">
+  <div class="page">
+    <div class="container">
+      <h1 data-i18n="src.title">{t('ko', 'src.title')}</h1>
+      <p class="lead" data-i18n="src.lead">{t('ko', 'src.lead')}</p>
+
+      <section class="section" aria-labelledby="paper-title">
+        <h2 id="paper-title" data-i18n="src.paperTitle">{t('ko', 'src.paperTitle')}</h2>
+        <div class="card">
+          <p style="margin: 0 0 0.5rem;">
+            <strong>{t('ko', 'common.paperAuthor')}</strong>, 「{t('ko', 'common.paperTitle')}」,{' '}
+            {t('ko', 'common.paperVenue')}, {t('ko', 'common.paperDate')}.
+          </p>
+          <p style="margin: 0;" data-i18n="src.paperRole">{t('ko', 'src.paperRole')}</p>
+          <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--ink-faint);" data-i18n="src.paperNotProvided">
+            {t('ko', 'src.paperNotProvided')}
+          </p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="sources-title">
+        <h2 id="sources-title" data-i18n="common.relatedSites">{t('ko', 'common.relatedSites')}</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="src.table.col.source">{t('ko', 'src.table.col.source')}</th>
+                <th scope="col" data-i18n="src.table.col.role">{t('ko', 'src.table.col.role')}</th>
+                <th scope="col" data-i18n="src.colStatus">{t('ko', 'src.colStatus')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>CAIPEX</strong><br><a href="https://caipex.site/" rel="external noopener">caipex.site</a></td>
+                <td data-i18n="src.caipexRole">{t('ko', 'src.caipexRole')}</td>
+                <td><EvidenceBadge state="NARRATIVE" /></td>
+              </tr>
+              <tr>
+                <td><strong>AstraHo</strong><br><a href="https://protofelix.moip.ai.kr/astra/" rel="external noopener">protofelix.moip.ai.kr/astra/</a></td>
+                <td data-i18n="src.astrahoRole">{t('ko', 'src.astrahoRole')}</td>
+                <td><EvidenceBadge state="NARRATIVE" /></td>
+              </tr>
+              <tr>
+                <td><strong>Protofelix</strong><br><a href="https://protofelix.moip.ai.kr/" rel="external noopener">protofelix.moip.ai.kr</a></td>
+                <td data-i18n="src.protofelixRole">{t('ko', 'src.protofelixRole')}</td>
+                <td><EvidenceBadge state="NARRATIVE" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="glossary-title">
+        <h2 id="glossary-title" data-i18n="src.glossaryTitle">{t('ko', 'src.glossaryTitle')}</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="src.colTermKo">{t('ko', 'src.colTermKo')}</th>
+                <th scope="col" data-i18n="src.colTermEn">{t('ko', 'src.colTermEn')}</th>
+                <th scope="col" data-i18n="src.colTermJa">{t('ko', 'src.colTermJa')}</th>
+                <th scope="col" data-i18n="src.colTermDesc">{t('ko', 'src.colTermDesc')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {GLOSSARY.map((term) => (
+                <tr>
+                  <td><strong>{term.name.ko}</strong></td>
+                  <td>{term.name.en}</td>
+                  <td>{term.name.ja}</td>
+                  <td data-i18n={term.descKey}>{t('ko', term.descKey)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="evidence-title">
+        <h2 id="evidence-title" data-i18n="src.evidenceTitle">{t('ko', 'src.evidenceTitle')}</h2>
+        <div class="card-grid">
+          {states.map((s) => (
+            <div class="card" style="padding: 0.8rem;">
+              <EvidenceBadge state={s} />
+              <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--ink-soft);" data-i18n={`badge.${s}.desc`}>
+                {t('ko', `badge.${s}.desc`)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <NextLinks next={{ href: '/research/', key: 'next.research' }} />
+    </div>
+  </div>
+</BaseLayout>

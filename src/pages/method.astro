@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
+import NextLinks from '../components/NextLinks.astro';
+import { t } from '../i18n';
+import { METRICS, MEASURED_REQUIREMENTS } from '../data/metrics';
+
+const fieldKeys = ['meth.field.def', 'meth.field.raw', 'meth.field.ctrl', 'meth.field.fail'] as const;
+---
+
+<BaseLayout titleKey="meta.methodTitle" descKey="meta.methodDesc">
+  <div class="page">
+    <div class="container">
+      <h1 data-i18n="meth.title">{t('ko', 'meth.title')}</h1>
+      <p class="lead" data-i18n="meth.lead">{t('ko', 'meth.lead')}</p>
+      <div class="card-title-row">
+        <EvidenceBadge state="EXPECTED" />
+      </div>
+      <p data-i18n="meth.hypothesisNote">{t('ko', 'meth.hypothesisNote')}</p>
+
+      <section class="section" aria-labelledby="m2m3-title">
+        <h2 id="m2m3-title" data-i18n="meth.m2m3Title">{t('ko', 'meth.m2m3Title')}</h2>
+        <p data-i18n="meth.m2m3">{t('ko', 'meth.m2m3')}</p>
+      </section>
+
+      <section class="section" aria-labelledby="metric-title">
+        <h2 id="metric-title" data-i18n="meth.metricTitle">{t('ko', 'meth.metricTitle')}</h2>
+        {METRICS.map((metric) => (
+          <details class="metric-card">
+            <summary>
+              <span data-i18n={`meth.metric.${metric.id}`}>{t('ko', `meth.metric.${metric.id}`)}</span>
+              <EvidenceBadge state={metric.state} />
+            </summary>
+            <dl class="metric-fields">
+              {fieldKeys.map((fk) => (
+                <>
+                  <dt data-i18n={fk}>{t('ko', fk)}</dt>
+                  <dd data-i18n={`meth.metric.${metric.id}.${fk.split('.').pop()}`}>
+                    {t('ko', `meth.metric.${metric.id}.${fk.split('.').pop()}`)}
+                  </dd>
+                </>
+              ))}
+              <dt data-i18n="meth.field.who">{t('ko', 'meth.field.who')}</dt>
+              <dd data-i18n={metric.whoKey}>{t('ko', metric.whoKey)}</dd>
+              <dt data-i18n="meth.field.state">{t('ko', 'meth.field.state')}</dt>
+              <dd><EvidenceBadge state={metric.state} /></dd>
+            </dl>
+          </details>
+        ))}
+      </section>
+
+      <section class="section" aria-labelledby="required-title">
+        <h2 id="required-title" data-i18n="meth.requiredTitle">{t('ko', 'meth.requiredTitle')}</h2>
+        <p data-i18n="meth.requiredNote">{t('ko', 'meth.requiredNote')}</p>
+        <div class="card">
+          <ul>
+            {MEASURED_REQUIREMENTS.map((key) => (
+              <li data-i18n={key}>{t('ko', key)}</li>
+            ))}
+          </ul>
+        </div>
+        <div class="notice notice-info">
+          <span class="notice-title" data-i18n="common.measuredEmpty">{t('ko', 'common.measuredEmpty')}</span>
+          <EvidenceBadge state="MEASURED" />
+        </div>
+      </section>
+
+      <NextLinks next={{ href: '/future/', key: 'next.future' }} />
+    </div>
+  </div>
+</BaseLayout>

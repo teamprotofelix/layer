@@ -1,0 +1,160 @@
+---
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
+import NextLinks from '../components/NextLinks.astro';
+import { t } from '../i18n';
+import { JOURNEY } from '../data/journey';
+
+const base = import.meta.env.BASE_URL;
+
+// hero image: applies automatically when public/assets/images/astra-hero.webp
+// (or .png) exists; otherwise a CSS/SVG fallback fills the space.
+function findHeroImage(): string | null {
+  const root = resolve(process.cwd(), 'public', 'assets', 'images');
+  for (const ext of ['webp', 'png']) {
+    if (existsSync(resolve(root, `astra-hero.${ext}`))) return `${base}assets/images/astra-hero.${ext}`;
+  }
+  return null;
+}
+const heroImage = findHeroImage();
+
+const journeyItems = [1, 2, 3, 4, 5, 6, 7] as const;
+const states = ['NARRATIVE', 'CONCEPT', 'PROTOTYPE', 'SIMULATION', 'EXPECTED', 'MEASURED'] as const;
+const pageLinks = [
+  { href: '/research/', key: 'nav.research' },
+  { href: '/architecture/', key: 'nav.architecture' },
+  { href: '/layer-lab/', key: 'nav.layerLab' },
+  { href: '/persona-lab/', key: 'nav.personaLab' },
+  { href: '/mobility-lab/', key: 'nav.mobilityLab' },
+  { href: '/return-lab/', key: 'nav.returnLab' },
+  { href: '/experiment/', key: 'nav.experiment' },
+  { href: '/method/', key: 'nav.method' },
+  { href: '/future/', key: 'nav.future' },
+  { href: '/sources/', key: 'nav.sources' },
+];
+---
+
+<BaseLayout titleKey="meta.homeTitle" descKey="meta.homeDesc">
+  <div
+    class:list={['hero', { 'no-image': !heroImage }]}
+    style={heroImage ? `background-image: linear-gradient(180deg, rgb(246 243 236 / 0.15), var(--bg) 96%), url('${heroImage}');` : undefined}
+  >
+    <div class="container">
+      <p class="kicker" data-i18n="home.kicker">{t('ko', 'home.kicker')}</p>
+      <h1 data-i18n="home.h1">{t('ko', 'home.h1')}</h1>
+      <p class="lead" data-i18n="home.lead">{t('ko', 'home.lead')}</p>
+      <div class="card-title-row" style="margin-bottom: 1.25rem;">
+        <EvidenceBadge state="CONCEPT" />
+        <EvidenceBadge state="SIMULATION" />
+        <EvidenceBadge state="NARRATIVE" />
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#tutorial" data-i18n="home.cta">{t('ko', 'home.cta')}</a>
+        <a class="btn" href={`${base}research/`} data-i18n="home.ctaResearch">{t('ko', 'home.ctaResearch')}</a>
+        <a class="btn btn-ghost" href={`${base}layer-lab/`} data-i18n="home.ctaDeep">{t('ko', 'home.ctaDeep')}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <section class="section" aria-labelledby="guide-title">
+        <h2 id="guide-title" data-i18n="home.guideTitle">{t('ko', 'home.guideTitle')}</h2>
+        <p data-i18n="home.guideText">{t('ko', 'home.guideText')}</p>
+        <div class="card-grid card-grid-3">
+          <div class="card">
+            <h3>H · A-HMMA</h3>
+            <p data-i18n="research.ahmmaText">{t('ko', 'research.ahmmaText')}</p>
+            <EvidenceBadge state="CONCEPT" />
+          </div>
+          <div class="card">
+            <h3>M0–M3 · C0–C7</h3>
+            <p data-i18n="research.rqE.text">{t('ko', 'research.rqE.text')}</p>
+            <EvidenceBadge state="EXPECTED" />
+          </div>
+          <div class="card">
+            <h3>SIMULATION</h3>
+            <p data-i18n="common.simNotice">{t('ko', 'common.simNotice')}</p>
+            <EvidenceBadge state="SIMULATION" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="journey-title">
+        <h2 id="journey-title" data-i18n="home.journeyTitle">{t('ko', 'home.journeyTitle')}</h2>
+        <ol class="timeline">
+          {journeyItems.map((i) => (
+            <li data-i18n={`home.journey${i}`}>{t('ko', `home.journey${i}`)}</li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="section" id="tutorial" aria-labelledby="tutorial-title">
+        <div class="card tutorial-shell">
+          <h2 id="tutorial-title" data-i18n="tutorial.title">{t('ko', 'tutorial.title')}</h2>
+          <p data-i18n="tutorial.sub">{t('ko', 'tutorial.sub')}</p>
+          <div id="tutorial-root"></div>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--ink-faint);" data-i18n="home.tutorialLead">
+          {t('ko', 'home.tutorialLead')}
+        </p>
+      </section>
+
+      <section class="section" aria-labelledby="status-title">
+        <h2 id="status-title" data-i18n="home.statusTitle">{t('ko', 'home.statusTitle')}</h2>
+        <p data-i18n="home.statusText">{t('ko', 'home.statusText')}</p>
+        <div class="card-grid card-grid-3">
+          {states.map((s) => (
+            <div class="card" style="padding: 0.8rem;">
+              <EvidenceBadge state={s} />
+              <p style="margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--ink-soft);" data-i18n={`badge.${s}.desc`}>
+                {t('ko', `badge.${s}.desc`)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="pages-title">
+        <h2 id="pages-title" data-i18n="home.pagesTitle">{t('ko', 'home.pagesTitle')}</h2>
+        <ul class="card-grid card-grid-3" style="list-style: none; padding: 0; margin: 0;">
+          {pageLinks.map((p) => (
+            <li>
+              <a class="card" style="display: block; text-decoration: none; color: var(--ink);" href={`${base}${p.href.slice(1)}`} data-i18n={p.key}>
+                <strong>{t('ko', p.key)}</strong>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="paper-ref">
+        <div class="card">
+          <h2 id="paper-ref" style="margin-top: 0;" data-i18n="home.paperRef">{t('ko', 'home.paperRef')}</h2>
+          <p style="margin: 0;">
+            <a href={`${base}sources/`}>
+              {t('ko', 'common.paperAuthor')}, 「{t('ko', 'common.paperTitle')}」, {t('ko', 'common.paperVenue')},{' '}
+              {t('ko', 'common.paperDate')}.
+            </a>
+          </p>
+          <p style="margin: 0.5rem 0 0;">
+            <a href="https://caipex.site/" rel="external noopener" data-i18n="common.caipexSupport">
+              {t('ko', 'common.caipexSupport')}
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <NextLinks next={{ href: '/research/', key: 'next.research' }} />
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { mountTutorial } from '../labs/tutorial';
+
+  const root = document.getElementById('tutorial-root');
+  if (root) mountTutorial(root);
+</script>

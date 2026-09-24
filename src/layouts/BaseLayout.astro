@@ -1,0 +1,97 @@
+---
+import '../styles/global.css';
+import { t } from '../i18n';
+import type { I18nKey } from '../i18n';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+
+interface Props {
+  titleKey: I18nKey;
+  descKey?: I18nKey;
+  bodyClass?: string;
+}
+
+const { titleKey, descKey, bodyClass = '' } = Astro.props;
+const title = t('ko', titleKey);
+const description = descKey ? t('ko', descKey) : t('ko', 'meta.tagline');
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html
+  lang="ko"
+  data-theme-choice="system"
+  data-resolved-theme="light"
+  data-meta-title-key={titleKey}
+  data-meta-desc-key={descKey ?? ''}
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <script is:inline>
+      // Pre-paint theme: first visit defaults to `system`; a saved manual
+      // choice is honored. Runs before CSS to avoid a flash.
+      (function () {
+        var key = 'astra.theme';
+        var choice = 'system';
+        try {
+          var saved = localStorage.getItem(key);
+          if (saved === 'system' || saved === 'light' || saved === 'dark') choice = saved;
+        } catch (e) {
+          /* storage unavailable — system mode still works */
+        }
+        var dark =
+          choice === 'dark' ||
+          (choice === 'system' &&
+            window.matchMedia &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme-choice', choice);
+        document.documentElement.setAttribute('data-resolved-theme', dark ? 'dark' : 'light');
+      })();
+    </script>
+    <script is:inline>
+      // Early language attribute (full translation follows in the main script).
+      (function () {
+        var saved = null;
+        try {
+          saved = localStorage.getItem('astra.lang');
+        } catch (e) {
+          /* ignore */
+        }
+        var param = new URLSearchParams(window.location.search).get('lang');
+        var lang = null;
+        if (param === 'ko' || param === 'en' || param === 'ja') lang = param;
+        else if (saved === 'ko' || saved === 'en' || saved === 'ja') lang = saved;
+        if (lang) document.documentElement.lang = lang;
+      })();
+    </script>
+  </head>
+  <body class:list={[bodyClass]}>
+    <a class="skip-link" href="#main" data-i18n="nav.skipToContent">본문으로 건너뛰기</a>
+    <SiteHeader />
+    <div id="astra-announcer" class="visually-hidden" role="status" aria-live="polite"></div>
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+    <script>
+      import { initI18n, setPageMeta } from '../lib/i18n';
+      import { watchSystemTheme } from '../lib/theme';
+      import { wireChrome } from '../lib/chrome';
+
+      const htmlEl = document.documentElement;
+      const titleKey = htmlEl.dataset.metaTitleKey ?? 'meta.homeTitle';
+      const descKey = htmlEl.dataset.metaDescKey || undefined;
+
+      setPageMeta({ titleKey, descKey });
+      initI18n();
+      watchSystemTheme();
+      wireChrome();
+    </script>
+  </body>
+</html>

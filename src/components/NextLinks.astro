@@ -1,0 +1,27 @@
+---
+/**
+ * Every page closes with "다음 체험" (next page in the journey) and
+ * "연구 근거" (the research overview), plus a way back home.
+ */
+import { t } from '../i18n';
+import type { I18nKey } from '../i18n';
+
+interface Props {
+  next?: { href: string; key: I18nKey };
+}
+
+const { next } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<nav class="page-nav" aria-label="Journey">
+  <a href={base} data-i18n="common.backHome">{t('ko', 'common.backHome')}</a>
+  {
+    next && (
+      <a href={`${base}${next.href.slice(1)}`} data-i18n={next.key}>
+        {t('ko', next.key)}
+      </a>
+    )
+  }
+  <a href={`${base}research/`} data-i18n="common.researchBasis">{t('ko', 'common.researchBasis')}</a>
+</nav>

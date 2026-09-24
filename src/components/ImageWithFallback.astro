@@ -1,0 +1,68 @@
+---
+/**
+ * Optional editorial image. If the user places the exact filename in
+ * public/assets/images/ (WebP preferred, PNG accepted), it is used;
+ * otherwise a CSS/SVG placeholder is rendered so the page stays complete.
+ * Prohibited in images: text, labels, fake graphs, logos, people.
+ */
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { t } from '../i18n';
+import type { I18nKey } from '../i18n';
+
+interface Props {
+  /** basename without extension, e.g. "astra-hero" */
+  name: string;
+  altKey: I18nKey;
+  /** used for aspect-ratio hinting on the placeholder */
+  ratio?: string;
+  class?: string;
+}
+
+const { name, altKey, ratio = '16 / 9', class: className = '' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+function findImage(basename: string): string | null {
+  const root = resolve(process.cwd(), 'public', 'assets', 'images');
+  for (const ext of ['webp', 'png']) {
+    if (existsSync(resolve(root, `${basename}.${ext}`))) return `${base}assets/images/${basename}.${ext}`;
+  }
+  return null;
+}
+
+const src = findImage(name);
+const alt = t('ko', altKey);
+---
+
+{
+  src ? (
+    <img
+      src={src}
+      alt={alt}
+      data-i18n-attr={`alt|${altKey}`}
+      loading="lazy"
+      decoding="async"
+      class:list={['fallback-image', className]}
+      style={`aspect-ratio: ${ratio}; object-fit: cover; width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--line);`}
+    />
+  ) : (
+    <div
+      class:list={['fig-ark', className]}
+      role="img"
+      aria-label={alt}
+      data-i18n-attr={`aria-label|${altKey}`}
+      style={`aspect-ratio: ${ratio}; width: 100%;`}
+    >
+      <svg viewBox="0 0 400 240" aria-hidden="true" style="max-width: 100%; height: auto;">
+        <rect x="16" y="84" width="368" height="72" rx="14" fill="var(--teal-soft)" stroke="var(--line-strong)" stroke-width="2"></rect>
+        <rect x="60" y="64" width="88" height="112" rx="10" fill="var(--surface)" stroke="var(--teal)" stroke-width="2"></rect>
+        <rect x="168" y="44" width="88" height="152" rx="10" fill="var(--surface)" stroke="var(--teal)" stroke-width="2"></rect>
+        <rect x="276" y="64" width="88" height="112" rx="10" fill="var(--surface)" stroke="var(--amber)" stroke-width="2"></rect>
+        <circle cx="104" cy="100" r="8" fill="var(--teal)"></circle>
+        <circle cx="212" cy="92" r="8" fill="var(--teal)"></circle>
+        <circle cx="320" cy="100" r="8" fill="var(--amber)"></circle>
+        <path d="M60 120 L164 100 M164 140 L274 92" stroke="var(--line-strong)" stroke-width="2" stroke-dasharray="4 4"></path>
+      </svg>
+    </div>
+  )
+}
