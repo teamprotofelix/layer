@@ -22,3 +22,6 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# 사용자 작업 영속성 폴더 — GitHub에 올라가지 않음
+.작업영속성/
